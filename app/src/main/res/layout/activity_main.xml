@@ -141,6 +141,7 @@
 
             <TextView
                 style="@style/NumberButton"
+                android:id="@+id/dot_btn"
                 android:text="." />
 
             <TextView
@@ -153,6 +154,7 @@
                 android:text="Back" />
             <TextView
                 style="@style/ActionButton"
+                android:id="@+id/equal_btn"
                 android:text="=" />
 
         </LinearLayout>

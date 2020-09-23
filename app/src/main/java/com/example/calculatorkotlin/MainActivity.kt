@@ -2,7 +2,9 @@ package com.example.calculatorkotlin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
+import net.objecthunter.exp4j.ExpressionBuilder
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         btn_7.setOnClickListener { setTextFields("7") }
         btn_8.setOnClickListener { setTextFields("8") }
         btn_9.setOnClickListener { setTextFields("9") }
+        dot_btn.setOnClickListener { setTextFields(".") }
         minus_btn.setOnClickListener { setTextFields("-") }
         plus_btn.setOnClickListener { setTextFields("+") }
         mult_btn.setOnClickListener { setTextFields("*") }
@@ -33,13 +36,31 @@ class MainActivity : AppCompatActivity() {
 
         back_btn.setOnClickListener {
             val str = math_operation.text.toString()
-            if(str.isNotEmpty()){
-                math_operation.text = str.substring(0, str.length - 1)
+            if(str.isNotEmpty()) math_operation.text = str.substring(0, str.length - 1)
+            result_text.text = ""
+        }
+
+        equal_btn.setOnClickListener {
+            try {
+                val ex = ExpressionBuilder(math_operation.text.toString()).build()
+                val result = ex.evaluate()
+
+                val longRes = result.toLong()
+                if (result == longRes.toDouble())
+                    result_text.text = longRes.toString()
+                else
+                    result_text.text = result.toString()
+            } catch (e:Exception){
+                Log.d("Ошибка","сообщение: ${e.message}")
             }
         }
     }
 
     fun setTextFields(str: String){
+        if (result_text.text != "") {
+            math_operation.text = result_text.text
+            result_text.text = ""
+        }
         math_operation.append(str)
     }
 }
